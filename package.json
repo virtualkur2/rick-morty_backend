@@ -1,0 +1,27 @@
+{
+  "name": "rick-morty_backend",
+  "version": "1.0.0",
+  "description": "Another Rick & Morty simple App",
+  "keywords": [
+    "Rick&Morty",
+    "API",
+    "Express",
+    "Auth",
+    "API"
+  ],
+  "homepage": "https://github.com/virtualkur2/rick-morty_backend#readme",
+  "bugs": {
+    "url": "https://github.com/virtualkur2/rick-morty_backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virtualkur2/rick-morty_backend.git"
+  },
+  "license": "MIT",
+  "author": "Mauricio Contreras Canepa",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
