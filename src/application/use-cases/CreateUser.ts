@@ -1,6 +1,6 @@
 import { User } from "../../domain/entities/User";
 import { IUserRepository } from "../../domain/repositories/IUserRespository";
-import { IPasswordHashService } from "../../domain/services/PasswordHashService";
+import { IPasswordHashService } from "../../domain/services/IPasswordHashService";
 import { CreateUserDto } from "../dto/CreateUser.dto";
 import { v4 as uuidv4} from 'uuid';
 
