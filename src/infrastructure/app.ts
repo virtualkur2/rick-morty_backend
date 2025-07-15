@@ -1,4 +1,5 @@
-import express from "express"
+import express from "express";
+import helmet from "helmet";
 import { IUserRepository } from "../domain/repositories/IUserRespository";
 import { InMemoryUserRepository } from "./adapters/persistence/InMemoryUserRepository";
 import { IPasswordHashService } from "../domain/services/IPasswordHashService";
@@ -14,6 +15,7 @@ export const buildApp = () => {
     const app = express();
 
     // App config
+    app.use(helmet());
     app.use(express.json());
     app.use(express.urlencoded({extended: true}));
 
