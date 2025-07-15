@@ -19,7 +19,7 @@ export class LoginUserUseCase {
 
         const user = await this.userRepository.findByEmail(data.email);
 
-        if(!(user && user.password)) {
+        if(!user?.password) {
             throw new Error('Invalid credentials');
         }
 
