@@ -19,7 +19,7 @@ export class LoginUserUseCase {
 
         const user = await this.userRepository.findByEmail(data.email);
 
-        if(!user?.password) {
+        if(!user?.password || !user?.role) {
             throw new Error('Invalid credentials');
         }
 
@@ -29,10 +29,10 @@ export class LoginUserUseCase {
             throw new Error('Invalid credentials');
         }
 
-        const tokenPayload: ITokenPayload = { userId: user.id };
+        const tokenPayload: ITokenPayload = { userId: user.id, role: user.role };
         const token = this.tokenService.generateToken(tokenPayload);
 
-        const userWithoutPassword = new User(user.id, user.name, user.email);
+        const userWithoutPassword = new User(user.id, user.name, user.email, undefined, user.role);
 
         return { user: userWithoutPassword, token };
     }

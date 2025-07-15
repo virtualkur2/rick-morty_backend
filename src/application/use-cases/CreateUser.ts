@@ -1,4 +1,4 @@
-import { User } from "../../domain/entities/User";
+import { User, UserRole } from "../../domain/entities/User";
 import { IUserRepository } from "../../domain/repositories/IUserRespository";
 import { IPasswordHashService } from "../../domain/services/IPasswordHashService";
 import { CreateUserDto } from "../dto/CreateUser.dto";
@@ -22,11 +22,11 @@ export class CreateUserUseCase {
         }
 
         const hashedPassword = await this.passwordHasher.hash(data.password);
-        const newUser = new User(uuidv4(), data.name, data.email, hashedPassword);
+        const newUser = new User(uuidv4(), data.name, data.email, hashedPassword, UserRole.USER);
 
         const savedUser = await this.userRepository.save(newUser);
 
-        const userWithoutPassword = new User(savedUser.id, savedUser.name, savedUser.email);
+        const userWithoutPassword = new User(savedUser.id, savedUser.name, savedUser.email, undefined, savedUser.role);
         
         return userWithoutPassword;
     }

@@ -16,6 +16,8 @@ import { GetRickAndMortyCharacterByIdUseCase } from "../application/use-cases/Ge
 import { RickAndMortyController } from "./adapters/rest/controllers/RickAndMortyController";
 import { authMiddleware } from "./adapters/rest/middleware/authMiddleware";
 import rickAndMortyRoutes from "./adapters/rest/routes/rickAndMortyRoutes";
+import { authorizedRoles } from "./adapters/rest/middleware/authRoleMiddleware";
+import { UserRole } from "../domain/entities/User";
 
 export const buildApp = () => {
     const app = express();
@@ -25,12 +27,11 @@ export const buildApp = () => {
     app.use(express.json());
     app.use(express.urlencoded({extended: true}));
 
-    // Dependency injection
+    // Dependencies
     const userRespository: IUserRepository = new InMemoryUserRepository();
     const passwordHasher: IPasswordHashService = new ScryptPasswordHasher();
     const tokenService: ITokenService = new JwtTokenService();
     const rickAndMortyService = new RickAndMortyApiAdapter();
-
 
     // Use cases
     const createUserUseCase = new CreateUserUseCase(userRespository, passwordHasher);
@@ -43,13 +44,15 @@ export const buildApp = () => {
     const rickAndMortyController = new RickAndMortyController(getRickAndMortyCharactersUseCase, getRickAndMortyCharacterByIdUseCase);
 
     // Middleware
-    const jwtAuthMiddleware = authMiddleware(tokenService);
+    const authorizationMiddleware = authMiddleware(tokenService);
+    const userRoleMiddleware = authorizedRoles([UserRole.ADMIN, UserRole.USER]);
+    const adminRoleMiddleware = authorizedRoles([UserRole.ADMIN]);
 
     // Public Routes
     app.use('/auth', authRoutes(authController));
 
     // Private routes
-    app.use('/rick-and-morty', jwtAuthMiddleware, rickAndMortyRoutes(rickAndMortyController));
+    app.use('/rick-and-morty', authorizationMiddleware, userRoleMiddleware, rickAndMortyRoutes(rickAndMortyController));
 
     return app;
 }

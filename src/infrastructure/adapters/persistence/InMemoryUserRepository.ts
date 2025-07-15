@@ -7,11 +7,15 @@ export class InMemoryUserRepository implements IUserRepository {
     async save(user: User): Promise<User> {
         const index = this.users.findIndex(u => u.id === user.id);
         if (index > -1) {
-            this.users[index] = user;
+            this.users[index] = {...this.users[index], ...user};
         } else {
             this.users.push(user);
         }
         return user;
+    }
+
+    async find(): Promise<User[]> {
+        return this.users;
     }
 
     async findById(id: string): Promise<User | null> {
