@@ -13,10 +13,15 @@ export class AuthController {
     
     async signup(req: Request, res: Response): Promise<Response> {
         try {
+            if (!(req.body?.name && req.body?.email && req.body?.password)) {
+                throw new Error('User data missing');
+            }
             const createUserDto: CreateUserDto = req.body;
             const newUser = await this.createUserUseCase.execute(createUserDto);
+            const message = 'User registered successfully!'
+            console.info(message);
             return res.status(201).json({
-                message: 'User registered successfully!',
+                message,
                 user: newUser
             });
         } catch (error: any) {
@@ -29,8 +34,12 @@ export class AuthController {
 
     async login(req: Request, res: Response): Promise<Response> {
         try {
+            if (!(req.body?.email && req.body?.password)) {
+                throw new Error('User data missing');
+            }
             const loginUserDto: LoginUserDto = req.body;
             const authResponse = await this.loginUserUseCase.execute(loginUserDto);
+            console.info('Login successfull for user:', req.body.email);
             return res.status(201).json(authResponse);
             
         } catch (error: any) {

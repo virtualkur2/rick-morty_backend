@@ -1,9 +1,9 @@
 import crypto from 'crypto';
 import { IPasswordHashService } from "../../../domain/services/IPasswordHashService";
 
-export class CryptoPasswordHasher implements IPasswordHashService {
+export class ScryptPasswordHasher implements IPasswordHashService {
     private readonly SCRYPT_CONFIG = {
-        N: 65536,
+        N: 16384,
         r: 8,
         p: 1,
         keylen: 64,
@@ -32,9 +32,9 @@ export class CryptoPasswordHasher implements IPasswordHashService {
     async compare(password: string, hash: string): Promise<boolean> {
         const hashParts = hash.split('$');
         
-        // hashParts[0] is undefined since hash starts with $
+        // hashParts[0] is not used since hash starts with $
 
-        if (hashParts.length !== 4 || hashParts[1] !== 'scrypt') {
+        if (hashParts.length !== 5 || hashParts[1] !== 'scrypt') {
             console.error('Password hasher: Invalid hash format or not scrypt hash from our system');
             return false;
         }
