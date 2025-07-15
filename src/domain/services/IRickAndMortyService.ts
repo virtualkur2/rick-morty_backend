@@ -14,5 +14,4 @@ export type PagedResponse<T> = {
 export interface IRickAndMortyService {
     getCharacters(page?: number, name?:string): Promise<PagedResponse<RickAndMortyCharacterDto[]>>;
     getCharacterById(id: number): Promise<RickAndMortyCharacter | null>;
-    getCharacterByName(name: string): Promise<RickAndMortyCharacter | null>;
 }
