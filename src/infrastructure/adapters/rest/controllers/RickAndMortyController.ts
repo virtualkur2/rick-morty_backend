@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { GetRickAndMortyCharactersUseCase } from "../../../../application/use-cases/GetRickAndMortyCharactersUseCase";
-import { GetRickAndMortyCharacterByIdUseCase } from "../../../../application/use-cases/GetRickAndMortyCharacterByIdUseCase";
+import { GetRickAndMortyCharactersUseCase } from "../../../../application/use-cases/GetRickAndMortyCharacters";
+import { GetRickAndMortyCharacterByIdUseCase } from "../../../../application/use-cases/GetRickAndMortyCharacterById";
 
 export class RickAndMortyController {
     constructor(
