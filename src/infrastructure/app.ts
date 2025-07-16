@@ -18,6 +18,13 @@ import { authMiddleware } from "./adapters/rest/middleware/authMiddleware";
 import rickAndMortyRoutes from "./adapters/rest/routes/rickAndMortyRoutes";
 import { authorizedRoles } from "./adapters/rest/middleware/authRoleMiddleware";
 import { UserRole } from "../domain/entities/User";
+import { IFavoriteCharacterRepository } from "../domain/repositories/IFavoriteCharacterRepository";
+import { InMemoryFavoriteCharacterRepository } from "./adapters/persistence/InMemoryFavoriteCharacterRepository";
+import { AddFavoriteCharacterUseCase } from "../application/use-cases/AddFavoriteCharacter";
+import { RemoveFavoriteCharacterUseCase } from "../application/use-cases/RemoveFavoriteCharacter";
+import { GetUserFavoriteCharactersUseCase } from "../application/use-cases/GetUserFavoriteCharacters";
+import { FavoriteCharacterController } from "./adapters/rest/controllers/FavoriteCharacterController";
+import favoriteCharacterRoutes from "./adapters/rest/routes/favoriteCharacterRoutes";
 
 export const buildApp = () => {
     const app = express();
@@ -29,6 +36,7 @@ export const buildApp = () => {
 
     // Dependencies
     const userRespository: IUserRepository = new InMemoryUserRepository();
+    const favoriteCharacterRepository: IFavoriteCharacterRepository = new InMemoryFavoriteCharacterRepository();
     const passwordHasher: IPasswordHashService = new ScryptPasswordHasher();
     const tokenService: ITokenService = new JwtTokenService();
     const rickAndMortyService = new RickAndMortyApiAdapter();
@@ -38,10 +46,18 @@ export const buildApp = () => {
     const loginUserUseCase = new LoginUserUseCase(userRespository, passwordHasher, tokenService);
     const getRickAndMortyCharactersUseCase = new GetRickAndMortyCharactersUseCase(rickAndMortyService);
     const getRickAndMortyCharacterByIdUseCase = new GetRickAndMortyCharacterByIdUseCase(rickAndMortyService);
+    const addFavoriteCharacterUseCase = new AddFavoriteCharacterUseCase(favoriteCharacterRepository, rickAndMortyService);
+    const removeFavoriteCharacterUseCase = new RemoveFavoriteCharacterUseCase(favoriteCharacterRepository);
+    const getUserFavoriteCharactersUseCase = new GetUserFavoriteCharactersUseCase(favoriteCharacterRepository);
 
     // Controllers
     const authController = new AuthController(createUserUseCase, loginUserUseCase);
     const rickAndMortyController = new RickAndMortyController(getRickAndMortyCharactersUseCase, getRickAndMortyCharacterByIdUseCase);
+    const favoriteCharacterController = new FavoriteCharacterController(
+        addFavoriteCharacterUseCase,
+        removeFavoriteCharacterUseCase,
+        getUserFavoriteCharactersUseCase
+    );
 
     // Middleware
     const authorizationMiddleware = authMiddleware(tokenService);
@@ -53,6 +69,13 @@ export const buildApp = () => {
 
     // Private routes
     app.use('/rick-and-morty', authorizationMiddleware, userRoleMiddleware, rickAndMortyRoutes(rickAndMortyController));
+    app.use('/favorites', authorizationMiddleware, userRoleMiddleware, favoriteCharacterRoutes(favoriteCharacterController));
+
+    // Default error handling
+    app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+        console.error(err.stack);
+        res.status(500).send('Something went wrong!');
+    });
 
     return app;
 }

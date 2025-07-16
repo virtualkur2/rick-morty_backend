@@ -1,7 +1,7 @@
 import { FavoriteCharacter } from "../../../domain/entities/FavoriteCharacter";
 import { IFavoriteCharacterRepository } from "../../../domain/repositories/IFavoriteCharacterRepository";
 
-export class InMememoryFavoriteCharacterRepository implements IFavoriteCharacterRepository {
+export class InMemoryFavoriteCharacterRepository implements IFavoriteCharacterRepository {
     private favorites: FavoriteCharacter[] = [];
 
     async save(favorite: FavoriteCharacter): Promise<FavoriteCharacter> {
