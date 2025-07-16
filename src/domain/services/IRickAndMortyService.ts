@@ -1,4 +1,3 @@
-import { RickAndMortyCharacterDto } from "../../application/dto/RickAndMortyCharacter.dto";
 import { RickAndMortyCharacter } from "../entities/RickAndMortyCharacter";
 
 export type PagedResponse<T> = {
@@ -12,6 +11,6 @@ export type PagedResponse<T> = {
 }
 
 export interface IRickAndMortyService {
-    getCharacters(page?: number, name?:string): Promise<PagedResponse<RickAndMortyCharacterDto[]>>;
+    getCharacters(page?: number, name?:string): Promise<PagedResponse<RickAndMortyCharacter[]>>;
     getCharacterById(id: number): Promise<RickAndMortyCharacter | null>;
 }

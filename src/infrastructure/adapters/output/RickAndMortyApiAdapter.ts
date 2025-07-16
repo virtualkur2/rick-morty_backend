@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
 import { IRickAndMortyService, PagedResponse } from "../../../domain/services/IRickAndMortyService";
-import { RickAndMortyCharacterDto } from '../../../application/dto/RickAndMortyCharacter.dto';
 import { RickAndMortyCharacter } from '../../../domain/entities/RickAndMortyCharacter';
 
 dotenv.config();
@@ -13,7 +12,7 @@ export class RickAndMortyApiAdapter implements IRickAndMortyService {
     private readonly apiUrl = process.env.API_URL ?? 'https://rickandmortyapi.com/api';
     private readonly CHARACTER_PATH = 'character';
 
-    async getCharacters(page?: number, name?: string): Promise<PagedResponse<RickAndMortyCharacterDto[]>> {
+    async getCharacters(page?: number, name?: string): Promise<PagedResponse<RickAndMortyCharacter[]>> {
         try {
             const params: {page?: number, name?: string} = {};
             if(page) params.page = page;

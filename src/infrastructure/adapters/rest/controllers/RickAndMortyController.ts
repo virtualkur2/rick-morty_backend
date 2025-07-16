@@ -9,11 +9,11 @@ export class RickAndMortyController {
     ) {}
 
     async getCharacters(req: Request, res: Response): Promise<Response> {
+        const userId = req.user?.userId;
         try {
             const page = req.query.page ? parseInt(req.query.page as string) : undefined;
             const name = req.query.name ? req.query.name as string : undefined;
-
-            const data = await this.getRickAndMortyCharactersUseCase.execute(page, name);
+            const data = await this.getRickAndMortyCharactersUseCase.execute(userId, page, name);
             return res.status(200).json(data);
         } catch (error: any) {
             console.error('Error in RickAndMortyController.getCharacters:', error);
@@ -25,6 +25,7 @@ export class RickAndMortyController {
     }
 
     async getCharacterById(req: Request, res: Response): Promise<Response> {
+        const userId = req.user?.userId;
         try {
             const id = parseInt(req.params.id);
             if(isNaN(id)) {
@@ -32,7 +33,7 @@ export class RickAndMortyController {
                     message: 'Invalid character ID'
                 });
             }
-            const character = await this.getRickAndMortyCharacterByIdUseCase.execute(id);
+            const character = await this.getRickAndMortyCharacterByIdUseCase.execute(id, userId);
             if(!character) {
                 return res.status(404).json({
                     message: 'Character not found!'

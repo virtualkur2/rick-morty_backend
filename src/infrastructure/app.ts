@@ -44,8 +44,8 @@ export const buildApp = () => {
     // Use cases
     const createUserUseCase = new CreateUserUseCase(userRespository, passwordHasher);
     const loginUserUseCase = new LoginUserUseCase(userRespository, passwordHasher, tokenService);
-    const getRickAndMortyCharactersUseCase = new GetRickAndMortyCharactersUseCase(rickAndMortyService);
-    const getRickAndMortyCharacterByIdUseCase = new GetRickAndMortyCharacterByIdUseCase(rickAndMortyService);
+    const getRickAndMortyCharactersUseCase = new GetRickAndMortyCharactersUseCase(rickAndMortyService, favoriteCharacterRepository);
+    const getRickAndMortyCharacterByIdUseCase = new GetRickAndMortyCharacterByIdUseCase(rickAndMortyService, favoriteCharacterRepository);
     const addFavoriteCharacterUseCase = new AddFavoriteCharacterUseCase(favoriteCharacterRepository, rickAndMortyService);
     const removeFavoriteCharacterUseCase = new RemoveFavoriteCharacterUseCase(favoriteCharacterRepository);
     const getUserFavoriteCharactersUseCase = new GetUserFavoriteCharactersUseCase(favoriteCharacterRepository);
