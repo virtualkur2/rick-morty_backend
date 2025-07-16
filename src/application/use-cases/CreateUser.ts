@@ -1,5 +1,5 @@
 import { User, UserRole } from "../../domain/entities/User";
-import { IUserRepository } from "../../domain/repositories/IUserRespository";
+import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { IPasswordHashService } from "../../domain/services/IPasswordHashService";
 import { CreateUserDto } from "../dto/CreateUser.dto";
 import { v4 as uuidv4} from 'uuid';

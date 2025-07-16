@@ -1,6 +1,6 @@
 import express from "express";
 import helmet from "helmet";
-import { IUserRepository } from "../domain/repositories/IUserRespository";
+import { IUserRepository } from "../domain/repositories/IUserRepository";
 import { InMemoryUserRepository } from "./adapters/persistence/InMemoryUserRepository";
 import { IPasswordHashService } from "../domain/services/IPasswordHashService";
 import { ScryptPasswordHasher } from "./adapters/security/ScryptPasswordHasher";

@@ -1,5 +1,5 @@
 import { User } from "../../domain/entities/User";
-import { IUserRepository } from "../../domain/repositories/IUserRespository";
+import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { IPasswordHashService } from "../../domain/services/IPasswordHashService";
 import { ITokenPayload, ITokenService } from "../../domain/services/ITokenService";
 import { AuthUserResponseDto } from "../dto/AuthUserResponse.dto";
