@@ -1,6 +1,6 @@
 import { IFavoriteCharacterRepository } from "../../domain/repositories/IFavoriteCharacterRepository";
 
-export class RemoveFavoriteCharacter {
+export class RemoveFavoriteCharacterUseCase {
     constructor(
         private readonly favoriteCharacterRepository: IFavoriteCharacterRepository
     ) {}

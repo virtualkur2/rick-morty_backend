@@ -1,7 +1,7 @@
 import { IFavoriteCharacterRepository } from "../../domain/repositories/IFavoriteCharacterRepository";
 import { FavoriteCharacterDto } from "../dto/FavoriteCharacter.dto";
 
-export class GetUserFavoriteCharacters {
+export class GetUserFavoriteCharactersUseCase {
     constructor(
         private readonly favoriteCharacterRepository: IFavoriteCharacterRepository
     ) {}
