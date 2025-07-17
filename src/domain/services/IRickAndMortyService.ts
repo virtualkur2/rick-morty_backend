@@ -1,4 +1,4 @@
-import { RickAndMortyCharacter } from "../entities/RickAndMortyCharacter";
+import { CharacterStatus, RickAndMortyCharacter } from "../entities/RickAndMortyCharacter";
 
 export type PagedResponse<T> = {
     info: {
@@ -11,6 +11,11 @@ export type PagedResponse<T> = {
 }
 
 export interface IRickAndMortyService {
-    getCharacters(page?: number, name?:string): Promise<PagedResponse<RickAndMortyCharacter[]>>;
+    getCharacters(
+        page?: number,
+        name?: string,
+        species?: string,
+        status?: CharacterStatus,
+    ): Promise<PagedResponse<RickAndMortyCharacter[]>>;
     getCharacterById(id: number): Promise<RickAndMortyCharacter | null>;
 }

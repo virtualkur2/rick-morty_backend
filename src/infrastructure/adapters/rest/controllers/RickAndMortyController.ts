@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { GetRickAndMortyCharactersUseCase } from "../../../../application/use-cases/GetRickAndMortyCharacters";
 import { GetRickAndMortyCharacterByIdUseCase } from "../../../../application/use-cases/GetRickAndMortyCharacterById";
+import { RickAndMortyCharacter } from "../../../../domain/entities/RickAndMortyCharacter";
 
 export class RickAndMortyController {
     constructor(
@@ -13,7 +14,12 @@ export class RickAndMortyController {
         try {
             const page = req.query.page ? parseInt(req.query.page as string) : undefined;
             const name = req.query.name ? req.query.name as string : undefined;
-            const data = await this.getRickAndMortyCharactersUseCase.execute(userId, page, name);
+            const species = req.query.species ? req.query.species as string : undefined;
+            const status = RickAndMortyCharacter.isValidStatus(req.query.status) ? req.query.status : undefined;
+            const isFavoriteFilter = RickAndMortyCharacter.isFavoriteFilter(req.query.isFavorite)
+                ? req.query.isFavorite.toString() === 'true'
+                : undefined;
+            const data = await this.getRickAndMortyCharactersUseCase.execute(userId, page, name, species, status, isFavoriteFilter);
             return res.status(200).json(data);
         } catch (error: any) {
             console.error('Error in RickAndMortyController.getCharacters:', error);

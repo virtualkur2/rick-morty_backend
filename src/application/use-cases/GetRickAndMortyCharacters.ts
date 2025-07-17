@@ -1,3 +1,4 @@
+import { CharacterStatus } from "../../domain/entities/RickAndMortyCharacter";
 import { IFavoriteCharacterRepository } from "../../domain/repositories/IFavoriteCharacterRepository";
 import { IRickAndMortyService, PagedResponse } from "../../domain/services/IRickAndMortyService";
 import { RickAndMortyCharacterDto } from "../dto/RickAndMortyCharacter.dto";
@@ -8,9 +9,16 @@ export class GetRickAndMortyCharactersUseCase {
         private readonly favoriteCharacterRepository: IFavoriteCharacterRepository
     ) {}
 
-    async execute(userId?: string, page?: number, name?: string): Promise<PagedResponse<RickAndMortyCharacterDto[]>> {
+    async execute(
+        userId?: string,
+        page?: number,
+        name?: string,
+        species?: string,
+        status?: CharacterStatus,
+        isFavoriteFilter?: boolean,
+    ): Promise<PagedResponse<RickAndMortyCharacterDto[]>> {
         // TODO: add cache logic here
-        const data = await this.rickAndMortyService.getCharacters(page, name);
+        const data = await this.rickAndMortyService.getCharacters(page, name, species, status);
        
         const userFavorites: Map<number, boolean> = new Map();
 
@@ -32,7 +40,7 @@ export class GetRickAndMortyCharactersUseCase {
         
         return {
             info: data.info,
-            results: charactersDto
+            results: isFavoriteFilter !== undefined ? charactersDto.filter(c => c.isFavorite === isFavoriteFilter) : charactersDto,
         }
     }
 }
