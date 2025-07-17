@@ -15,10 +15,8 @@ export class GetRickAndMortyCharactersUseCase {
         const userFavorites: Map<number, boolean> = new Map();
 
         if(userId) {
-            console.log({userId});
             const favorites = await this.favoriteCharacterRepository.findByUserId(userId);
             favorites.forEach(f => {
-                console.log('adding favorite to map');
                 userFavorites.set(f.characterId, true);
             });
         }
