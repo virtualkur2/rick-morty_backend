@@ -26,6 +26,9 @@ import { GetUserFavoriteCharactersUseCase } from "../application/use-cases/GetUs
 import { FavoriteCharacterController } from "./adapters/rest/controllers/FavoriteCharacterController";
 import favoriteCharacterRoutes from "./adapters/rest/routes/favoriteCharacterRoutes";
 import { ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASSWORD, NODE_ENV } from "./config/env";
+import { GetAllUsersUseCase } from "../application/use-cases/GetAllUsers";
+import { UserController } from "./adapters/rest/controllers/UserController";
+import userRoutes from "./adapters/rest/routes/userRoutes";
 
 export const buildApp = async () => {
     const app = express();
@@ -44,6 +47,7 @@ export const buildApp = async () => {
 
     // Use cases
     const createUserUseCase = new CreateUserUseCase(userRespository, passwordHasher);
+    const getAllUsersUseCase = new GetAllUsersUseCase(userRespository);
     const loginUserUseCase = new LoginUserUseCase(userRespository, passwordHasher, tokenService);
     const getRickAndMortyCharactersUseCase = new GetRickAndMortyCharactersUseCase(rickAndMortyService, favoriteCharacterRepository);
     const getRickAndMortyCharacterByIdUseCase = new GetRickAndMortyCharacterByIdUseCase(rickAndMortyService, favoriteCharacterRepository);
@@ -53,6 +57,7 @@ export const buildApp = async () => {
 
     // Controllers
     const authController = new AuthController(createUserUseCase, loginUserUseCase);
+    const userController = new UserController(getAllUsersUseCase);
     const rickAndMortyController = new RickAndMortyController(getRickAndMortyCharactersUseCase, getRickAndMortyCharacterByIdUseCase);
     const favoriteCharacterController = new FavoriteCharacterController(
         addFavoriteCharacterUseCase,
@@ -87,6 +92,7 @@ export const buildApp = async () => {
     // Private routes
     app.use('/rick-and-morty', authorizationMiddleware, userRoleMiddleware, rickAndMortyRoutes(rickAndMortyController));
     app.use('/favorites', authorizationMiddleware, userRoleMiddleware, favoriteCharacterRoutes(favoriteCharacterController));
+    app.use('/users', authorizationMiddleware, adminRoleMiddleware, userRoutes(userController));
 
     // Default error handling
     app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
