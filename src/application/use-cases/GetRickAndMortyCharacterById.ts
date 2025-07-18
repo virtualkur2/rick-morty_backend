@@ -10,7 +10,6 @@ export class GetRickAndMortyCharacterByIdUseCase {
     ) {}
 
     async execute(id: number, userId?: string): Promise<RickAndMortyCharacterDto | null> {
-        // TODO: add cache logic here
         const data = await this.rickAndMortyService.getCharacterById(id);
         if (!data) return null;
         let isFavorite = false;

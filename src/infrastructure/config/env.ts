@@ -11,3 +11,4 @@ export const NODE_ENV = process.env.NODE_ENV ?? 'development';
 export const ADMIN_NAME = process.env.ADMIN_NAME;
 export const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+export const MAX_CACHE_ENTRY_SIZE = parseInt(process.env.MAX_CACHE_ENTRY_SIZE ?? '1000');

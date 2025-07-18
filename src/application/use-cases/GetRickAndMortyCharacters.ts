@@ -18,7 +18,6 @@ export class GetRickAndMortyCharactersUseCase {
         species?: string,
         status?: CharacterStatus,
     ): Promise<PagedResponse<RickAndMortyCharacterDto[]>> {
-        // TODO: add cache logic here
         const data = await this.rickAndMortyService.getCharacters(page, name, species, status);
        
         const userFavorites: Set<number> = new Set();
