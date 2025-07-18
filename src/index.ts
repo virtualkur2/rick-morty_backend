@@ -1,10 +1,8 @@
-import dotenv from 'dotenv';
 import { buildApp } from "./infrastructure/app";
-
-dotenv.config();
+import { PORT } from './infrastructure/config/env';
 
 const server = buildApp();
-const port = process.env.PORT || 3000;
+const port = PORT;
 
 server.listen(port, () => {
     console.log(`Server up and running. Listening requests on port: ${port}`);

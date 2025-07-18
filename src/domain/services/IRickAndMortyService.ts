@@ -1,12 +1,13 @@
 import { CharacterStatus, RickAndMortyCharacter } from "../entities/RickAndMortyCharacter";
 
-export type PagedResponse<T> = {
-    info: {
+export type Pagination = {
         count: number;
         pages: number;
-        next: string | null;
-        prev: string | null;
-    },
+        page: number;
+}
+
+export type PagedResponse<T> = {
+    info: Pagination,
     results: T;
 }
 

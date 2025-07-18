@@ -1,17 +1,15 @@
-import dotenv from 'dotenv';
 import { StringValue } from 'ms';
 import * as jwt from 'jsonwebtoken';
 import { ITokenPayload, ITokenService } from "../../../domain/services/ITokenService";
-
-dotenv.config();
+import { JWT_EXPIRES_IN, JWT_SECRET } from '../../config/env';
 
 export class JwtTokenService implements ITokenService {
     private readonly secretKey: string;
     private readonly expiresIn: StringValue;
 
     constructor() {
-        this.secretKey = process.env.JWT_SECRET ?? 'your_jwt_secret_key_please_change_this_in_production';
-        this.expiresIn = (process.env.JWT_EXPIRES_IN ?? '1d') as StringValue;
+        this.secretKey = JWT_SECRET;
+        this.expiresIn = JWT_EXPIRES_IN as StringValue;
         if (!this.secretKey || this.secretKey === 'your_jwt_secret_key_please_change_this_in_production') {
             console.warn('WARNING: JWT_SECRET is not set or is using a default. Please set a strong secret in your .env file!');
         }
