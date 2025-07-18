@@ -33,8 +33,4 @@ export class RickAndMortyCharacter {
     static isValidStatus(value: any): value is CharacterStatus {
         return Object.values(CharacterStatus).includes(value);
     }
-
-    static isFavoriteFilter(value: any): value is boolean {
-        return typeof value === 'string' && (value.toLowerCase() === 'true' || value.toLowerCase() === 'false');
-    }
 }

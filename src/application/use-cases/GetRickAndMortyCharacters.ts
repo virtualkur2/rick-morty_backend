@@ -1,8 +1,7 @@
 import { CharacterStatus } from "../../domain/entities/RickAndMortyCharacter";
 import { UserRole } from "../../domain/entities/User";
 import { IFavoriteCharacterRepository } from "../../domain/repositories/IFavoriteCharacterRepository";
-import { IRickAndMortyService, PagedResponse, Pagination } from "../../domain/services/IRickAndMortyService";
-import { RICK_AND_MORTY_DEFAULT_PAGE_SIZE } from "../../infrastructure/config/env";
+import { IRickAndMortyService, PagedResponse } from "../../domain/services/IRickAndMortyService";
 import { RickAndMortyCharacterDto } from "../dto/RickAndMortyCharacter.dto";
 
 export class GetRickAndMortyCharactersUseCase {
@@ -18,7 +17,6 @@ export class GetRickAndMortyCharactersUseCase {
         name?: string,
         species?: string,
         status?: CharacterStatus,
-        isFavoriteFilter?: boolean,
     ): Promise<PagedResponse<RickAndMortyCharacterDto[]>> {
         // TODO: add cache logic here
         const data = await this.rickAndMortyService.getCharacters(page, name, species, status);
@@ -53,13 +51,9 @@ export class GetRickAndMortyCharactersUseCase {
             return baseDto;
         });
 
-        const results = isFavoriteFilter !== undefined ? charactersDto.filter(c => c.isFavorite === isFavoriteFilter) : charactersDto;
-        const info: Pagination = isFavoriteFilter !== undefined
-            ? {count: results.length, pages: Math.ceil(results.length / RICK_AND_MORTY_DEFAULT_PAGE_SIZE), page: page ?? 1}
-            : data.info; 
         return {
-            info,
-            results,
+            info: data.info,
+            results: charactersDto,
         }
     }
 }

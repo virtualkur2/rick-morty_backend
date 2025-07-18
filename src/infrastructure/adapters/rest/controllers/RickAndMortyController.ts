@@ -17,10 +17,7 @@ export class RickAndMortyController {
             const name = req.query.name ? req.query.name as string : undefined;
             const species = req.query.species ? req.query.species as string : undefined;
             const status = RickAndMortyCharacter.isValidStatus(req.query.status) ? req.query.status : undefined;
-            const isFavoriteFilter = RickAndMortyCharacter.isFavoriteFilter(req.query.isFavorite)
-                ? req.query.isFavorite.toString() === 'true'
-                : undefined;
-            const data = await this.getRickAndMortyCharactersUseCase.execute(userId, userRole, page, name, species, status, isFavoriteFilter);
+            const data = await this.getRickAndMortyCharactersUseCase.execute(userId, userRole, page, name, species, status);
             return res.status(200).json(data);
         } catch (error: any) {
             console.error('Error in RickAndMortyController.getCharacters:', error);
