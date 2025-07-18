@@ -1,9 +1,15 @@
 import { buildApp } from "./infrastructure/app";
-import { PORT } from './infrastructure/config/env';
+import { NODE_ENV, PORT } from './infrastructure/config/env';
 
-const server = buildApp();
-const port = PORT;
+buildApp()
+    .then((server) => {
+        server.listen(PORT, () => {
+            console.log(`Server up and running. Listening requests on port: ${PORT}`);
+            NODE_ENV && console.log(`Running application in: ${NODE_ENV} mode`);
+        });
+    })
+    .catch(e => {
+        console.error('FATAL ERROR: Couldn\'t start server...\n', e);
+    });
+;
 
-server.listen(port, () => {
-    console.log(`Server up and running. Listening requests on port: ${port}`);
-});

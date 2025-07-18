@@ -10,7 +10,7 @@ export class CreateUserUseCase {
         private readonly passwordHasher: IPasswordHashService,
     ) {}
 
-    async execute(data: CreateUserDto): Promise<User> {
+    async execute(data: CreateUserDto, isAdmin: boolean = false): Promise<User> {
         if(!(data.name && data.email && data.password)) {
             throw new Error('Name, email and password are required');
         }
@@ -22,7 +22,7 @@ export class CreateUserUseCase {
         }
 
         const hashedPassword = await this.passwordHasher.hash(data.password);
-        const newUser = new User(uuidv4(), data.name, data.email, hashedPassword, UserRole.USER);
+        const newUser = new User(uuidv4(), data.name, data.email, hashedPassword, isAdmin ? UserRole.ADMIN : UserRole.USER);
 
         const savedUser = await this.userRepository.save(newUser);
 

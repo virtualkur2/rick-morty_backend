@@ -25,10 +25,11 @@ import { RemoveFavoriteCharacterUseCase } from "../application/use-cases/RemoveF
 import { GetUserFavoriteCharactersUseCase } from "../application/use-cases/GetUserFavoriteCharacters";
 import { FavoriteCharacterController } from "./adapters/rest/controllers/FavoriteCharacterController";
 import favoriteCharacterRoutes from "./adapters/rest/routes/favoriteCharacterRoutes";
+import { ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASSWORD, NODE_ENV } from "./config/env";
 
-export const buildApp = () => {
+export const buildApp = async () => {
     const app = express();
-
+    
     // App config
     app.use(helmet());
     app.use(express.json());
@@ -63,6 +64,22 @@ export const buildApp = () => {
     const authorizationMiddleware = authMiddleware(tokenService);
     const userRoleMiddleware = authorizedRoles([UserRole.ADMIN, UserRole.USER]);
     const adminRoleMiddleware = authorizedRoles([UserRole.ADMIN]);
+
+    // DON'T DO THIS IN PRODUCTION
+    if(NODE_ENV === 'development' && ADMIN_NAME && ADMIN_EMAIL && ADMIN_PASSWORD) {
+        const existingAdmin = await userRespository.findByEmail(ADMIN_EMAIL);
+        if(!existingAdmin) {
+            console.log('Seeding initial admin...');
+            const isAdmin = true;
+            const admin = await createUserUseCase.execute({
+                name: ADMIN_NAME,
+                email: ADMIN_EMAIL,
+                password: ADMIN_PASSWORD,
+            }, isAdmin);
+            console.log(`Admin user: ${admin.email} seeded successfully.`);
+        }
+    }
+
 
     // Public Routes
     app.use('/auth', authRoutes(authController));
