@@ -25,7 +25,12 @@ export class RickAndMortyApiAdapter implements IRickAndMortyService {
                 char.name,
                 char.status,
                 char.species,
-                char.image
+                char.image,
+                // Extended fields
+                char.type,
+                char.gender,
+                char.origin,
+                char.created
             ));
 
             const info: Pagination = {
@@ -55,7 +60,12 @@ export class RickAndMortyApiAdapter implements IRickAndMortyService {
                 character.name,
                 character.status,
                 character.species,
-                character.image
+                character.image,
+                // Extended fields
+                character.type,
+                character.gender,
+                character.origin,
+                character.created
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 404) {

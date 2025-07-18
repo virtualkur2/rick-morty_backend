@@ -11,6 +11,7 @@ export class RickAndMortyController {
 
     async getCharacters(req: Request, res: Response): Promise<Response> {
         const userId = req.user?.userId;
+        const userRole = req.user?.role;
         try {
             const page = req.query.page ? parseInt(req.query.page as string) : undefined;
             const name = req.query.name ? req.query.name as string : undefined;
@@ -19,7 +20,7 @@ export class RickAndMortyController {
             const isFavoriteFilter = RickAndMortyCharacter.isFavoriteFilter(req.query.isFavorite)
                 ? req.query.isFavorite.toString() === 'true'
                 : undefined;
-            const data = await this.getRickAndMortyCharactersUseCase.execute(userId, page, name, species, status, isFavoriteFilter);
+            const data = await this.getRickAndMortyCharactersUseCase.execute(userId, userRole, page, name, species, status, isFavoriteFilter);
             return res.status(200).json(data);
         } catch (error: any) {
             console.error('Error in RickAndMortyController.getCharacters:', error);
