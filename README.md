@@ -52,17 +52,129 @@ Create a `.env` file in the root of your project. This file is **crucial for app
 
 ```env
 # Server Port
-PORT=3001
+PORT=3000
 
 # JWT Configuration
 JWT_SECRET=your_super_secret_jwt_key_here_please_change_this_to_a_strong_random_string!
-JWT_EXPIRES_IN=1h
+JWT_EXPIRES_IN=1d
 
 # Rick & Morty API Base URL
-RICK_AND_MORTY_API_BASE_URL=[https://rickandmortyapi.com/api](https://rickandmortyapi.com/api)
+RICK_AND_MORTY_API_BASE_URL=https://rickandmortyapi.com/api
 
 # Initial Admin User (In-Memory - NOT PERSISTED ACROSS APP RESTARTS)
 # If these are set, an admin user will be created in memory on application start.
 ADMIN_NAME=Admin
 ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD=SuperSecureAdminPass123!
+
+# Cache config
+MAX_CACHE_ENTRY_SIZE=1000
+```
+
+## API Endpoints
+
+All endpoints are prefixed with `http://localhost:3000` (or your configured `PORT`).
+
+---
+
+### Authentication
+
+#### Sign Up a New User
+
+`POST /auth/signup`
+
+**Body:**
+```json
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+
+#### Login User
+
+`POST /auth/login`
+
+**Body:**
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+
+**Response:** Returns a JWT token. Use this token in the `Authorization: Bearer <token>` header for protected routes.
+
+---
+
+### Rick & Morty Characters
+
+> Requires Authentication
+
+#### Get All Characters
+
+`GET /rick-and-morty/characters`
+
+**Query Params (Optional):** `page`, `name`, `species`, `status`
+
+Example:
+```
+GET /rick-and-morty/characters?page=2&name=rick
+```
+
+- **Admin Access:** Includes extended character details (`type`, `gender`, `origin`, `location`, `episode`, `url`, `created`).
+- **User Access:** Basic character details only.
+
+---
+
+### Favorite Characters
+
+> Requires Authentication
+
+#### Add a Character to Favorites
+
+`POST /favorites`
+
+**Body:**
+```json
+{
+  "characterId": 1
+}
+```
+
+#### Remove a Character from Favorites
+
+`DELETE /favorites/:characterId`
+
+Example:
+```
+DELETE /favorites/1
+```
+
+#### Get My Favorite Characters
+
+`GET /favorites`
+
+---
+
+### User Management (Admin Only)
+
+> Requires Admin Role Authentication
+
+#### Get All Registered Users
+
+`GET /users`
+
+#### Get a Specific User's Favorite Characters
+
+`GET /users/:userId/favorites`
+
+Example:
+```
+GET /users/some-user-id-123/favorites
+```
+
+---
+
+Feel free to explore and test the endpoints!
