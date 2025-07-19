@@ -57,7 +57,7 @@ export const buildApp = async () => {
 
     // Controllers
     const authController = new AuthController(createUserUseCase, loginUserUseCase);
-    const userController = new UserController(getAllUsersUseCase);
+    const userController = new UserController(getAllUsersUseCase, getUserFavoriteCharactersUseCase);
     const rickAndMortyController = new RickAndMortyController(getRickAndMortyCharactersUseCase, getRickAndMortyCharacterByIdUseCase);
     const favoriteCharacterController = new FavoriteCharacterController(
         addFavoriteCharacterUseCase,
