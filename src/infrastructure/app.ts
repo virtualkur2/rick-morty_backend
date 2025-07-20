@@ -1,5 +1,6 @@
 import express from "express";
 import helmet from "helmet";
+import cors from 'cors';
 import { IUserRepository } from "../domain/repositories/IUserRepository";
 import { InMemoryUserRepository } from "./adapters/persistence/InMemoryUserRepository";
 import { IPasswordHashService } from "../domain/services/IPasswordHashService";
@@ -29,12 +30,14 @@ import { ADMIN_EMAIL, ADMIN_NAME, ADMIN_PASSWORD, NODE_ENV } from "./config/env"
 import { GetAllUsersUseCase } from "../application/use-cases/GetAllUsers";
 import { UserController } from "./adapters/rest/controllers/UserController";
 import userRoutes from "./adapters/rest/routes/userRoutes";
+import { corsOptions } from "./config/cors";
 
 export const buildApp = async () => {
     const app = express();
     
     // App config
     app.use(helmet());
+    app.use(cors(corsOptions));
     app.use(express.json());
     app.use(express.urlencoded({extended: true}));
 
