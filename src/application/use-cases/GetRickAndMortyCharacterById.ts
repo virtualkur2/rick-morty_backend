@@ -1,3 +1,4 @@
+import { FavoriteCharacter } from "../../domain/entities/FavoriteCharacter";
 import { IFavoriteCharacterRepository } from "../../domain/repositories/IFavoriteCharacterRepository";
 import { IRickAndMortyService } from "../../domain/services/IRickAndMortyService";
 import { RickAndMortyCharacterDto } from "../dto/RickAndMortyCharacter.dto";
@@ -12,10 +13,9 @@ export class GetRickAndMortyCharacterByIdUseCase {
     async execute(id: number, userId?: string): Promise<RickAndMortyCharacterDto | null> {
         const data = await this.rickAndMortyService.getCharacterById(id);
         if (!data) return null;
-        let isFavorite = false;
+        let favorite: FavoriteCharacter | null = null;
         if (userId) {
-            const favorite = await this.favoriteCharacterRepository.findByUserIdAndCharacterId(userId, id);
-            isFavorite = !!favorite;
+            favorite = await this.favoriteCharacterRepository.findByUserIdAndCharacterId(userId, id);
         }
         const characterDto: RickAndMortyCharacterDto = {
             id: data.id,
@@ -23,7 +23,7 @@ export class GetRickAndMortyCharacterByIdUseCase {
             species: data.species,
             status: data.status,
             image: data.image,
-            isFavorite,
+            favoriteId: favorite ? favorite.id : undefined,
         };
         return characterDto;
     }

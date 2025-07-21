@@ -20,12 +20,12 @@ export class GetRickAndMortyCharactersUseCase {
     ): Promise<PagedResponse<RickAndMortyCharacterDto[]>> {
         const data = await this.rickAndMortyService.getCharacters(page, name, species, status);
        
-        const userFavorites: Set<number> = new Set();
+        const userFavorites: Map<number, string> = new Map();
 
         if(userId) {
             const favorites = await this.favoriteCharacterRepository.findByUserId(userId);
             favorites.forEach(f => {
-                userFavorites.add(f.characterId);
+                userFavorites.set(f.characterId, f.id);
             });
         }
 
@@ -36,7 +36,7 @@ export class GetRickAndMortyCharactersUseCase {
                 status: char.status,
                 species: char.species,
                 image: char.image,
-                isFavorite: userId ? userFavorites.has(char.id) : false,
+                favoriteId: userId && userFavorites.has(char.id) ? userFavorites.get(char.id) : undefined,
             };
             if(userRole === UserRole.ADMIN) {
                 return {
