@@ -1,12 +1,19 @@
 import { CorsOptions } from "cors";
 
-export const whiteListUrls: string[] = [
-    'http://localhost:5173'
-];
+export const whiteListUrls: string[] = []; // add any other url different from localhost
+
+const localhostRegex = /^http:\/\/localhost(:\d+)?$/;
 
 export const corsOptions: CorsOptions = {
     origin(requestOrigin, callback) {
-        if(whiteListUrls.indexOf(requestOrigin ?? 'NO_ORIGIN') !== -1) {
+        if(!requestOrigin) {
+            // NO origin header for tools like Postman, curl, etc.
+            return callback(null, true);
+        }
+        if (requestOrigin && (
+            whiteListUrls.includes(requestOrigin)
+            || localhostRegex.test(requestOrigin)
+        )) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
