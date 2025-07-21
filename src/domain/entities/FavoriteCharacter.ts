@@ -10,7 +10,7 @@ export class FavoriteCharacter {
         public addedAt: Date = new Date()
     ) {}
 
-    public static fromRickAndMortyCharcater(userId: string, character: RickAndMortyCharacter): FavoriteCharacter {
+    public static fromRickAndMortyCharacter(userId: string, character: RickAndMortyCharacter): FavoriteCharacter {
         return new FavoriteCharacter(
             uuidv4(),
             userId,

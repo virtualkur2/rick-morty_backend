@@ -27,7 +27,7 @@ export class AddFavoriteCharacterUseCase {
             throw new Error('Rick & Morty character not found');
         }
 
-        const favorite = FavoriteCharacter.fromRickAndMortyCharcater(userId, characterDetails);
+        const favorite = FavoriteCharacter.fromRickAndMortyCharacter(userId, characterDetails);
 
         const savedFavorite = await this.favoriteCharacterRepository.save(favorite);
 

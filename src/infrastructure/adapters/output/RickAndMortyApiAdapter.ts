@@ -97,7 +97,7 @@ export class RickAndMortyApiAdapter implements IRickAndMortyService {
     async getCharacterById(id: number): Promise<RickAndMortyCharacter | null> {
         try {
             const characterByIdUrl = `${this.baseUrl}/${id}`;
-            const cacheKey = normalizeUrl(this.baseUrl);
+            const cacheKey = normalizeUrl(characterByIdUrl);
 
             const cachedData = this.singleCharacterCache.get(cacheKey);
             
