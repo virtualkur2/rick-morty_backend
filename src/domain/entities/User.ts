@@ -8,6 +8,7 @@ export class User {
         public name: string,
         public email: string,
         public password?: string,
-        public role: UserRole = UserRole.USER
+        public role: UserRole = UserRole.USER,
+        public createdAt: Date = new Date(),
     ){}
 }
